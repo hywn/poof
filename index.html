@@ -5,6 +5,7 @@
 html { display: flex; justify-content: center }
 body { margin: 5em; width: 32em }
 #dropzone { border: outset; display: flex; justify-content: center; align-items: center }
+#uploads { white-space: nowrap }
 </style>
 
 <script>
@@ -45,7 +46,7 @@ DROPZONE.addEventListener('drop', e => {
 			}
 
 			const li = document.createElement('li')
-			li.innerHTML = `<a href='./file.php?hash=${j.hash}'>${j.hash}</a>`
+			li.innerHTML = `<a href='./file.php?hash=${j.hash}'>${j.hash}</a> (${file.name})`
 
 			UPLOADS.appendChild(li)
 		})
