@@ -3,13 +3,13 @@ $file_data = $_FILES['file_data'] or die(json_encode(array('success' => 'false',
 
 // not yet sure if this useful but just nice to have it
 if ($file_data['error'])
-	die(json_encode(array('success' => 'false', 'reason' => 'error')))
+	die(json_encode(array('success' => 'false', 'reason' => 'error')));
 
 $data = file_get_contents($file_data['tmp_name']);
 $type = $file_data['type'];
 $hash = sha1($data);
 
-$db = new SQLite3('./posts.db');
+$db = new SQLite3('./files.db');
 $db->enableExceptions(true);
 
 $db->query('create table if not exists files (

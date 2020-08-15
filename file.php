@@ -1,7 +1,7 @@
 <?php
 $hash = $_GET['hash'] or die('invalid hash');
 
-$db = new SQLite3('./posts.db');
+$db = new SQLite3('./files.db');
 
 $statement = $db->prepare('select * from files where hash = :hash');
 $statement->bindValue(':hash', $hash);
