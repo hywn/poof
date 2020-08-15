@@ -61,7 +61,7 @@ const upload_files =
 			}
 
 			const li = document.createElement('li')
-			li.innerHTML = `<a href='./file.php?hash=${j.hash}'>${j.hash}</a> (${file.name})`
+			li.innerHTML = `uploaded: [<a href='./file.php?hash=${j.hash}'>${j.hash}</a>] (${file.name})`
 
 			UPLOADS.appendChild(li)
 		})
