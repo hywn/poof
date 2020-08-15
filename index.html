@@ -37,10 +37,21 @@ const nothing = e => e.preventDefault()
 DROPZONE.addEventListener('dragenter', nothing)
 DROPZONE.addEventListener('dragover', nothing)
 
+const ack =
+	file =>
+{
+	const li = document.createElement('li')
+	li.innerText = `sent ${file.name} for upload...`
+
+	UPLOADS.appendChild(li)
+}
+
 const upload_files =
 	files =>
 {
-	for (const file of files)
+	for (const file of files) {
+		ack(file)
+
 		upload_file(file)
 			.then(r => r.json())
 			.then(j => {
@@ -54,6 +65,7 @@ const upload_files =
 
 			UPLOADS.appendChild(li)
 		})
+	}
 }
 
 DROPZONE.addEventListener('drop', e => {
