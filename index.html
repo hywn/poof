@@ -35,17 +35,20 @@ DROPZONE.addEventListener('dragover', nothing)
 
 DROPZONE.addEventListener('drop', e => {
 
-	upload_file(e.dataTransfer.files[0]).then(r => r.json()).then(j => {
-		if (!j.hash) {
-			console.error(j)
-			return
-		}
+	for (const file of e.dataTransfer.files)
+		upload_file(file)
+			.then(r => r.json())
+			.then(j => {
+				if (!j.hash) {
+					console.error(j)
+					return
+			}
 
-		const li = document.createElement('li')
-		li.innerHTML = `<a href='./file.php?hash=${j.hash}'>${j.hash}</a>`
+			const li = document.createElement('li')
+			li.innerHTML = `<a href='./file.php?hash=${j.hash}'>${j.hash}</a>`
 
-		UPLOADS.appendChild(li)
-	})
+			UPLOADS.appendChild(li)
+		})
 
 	e.preventDefault()
 })
