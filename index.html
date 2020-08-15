@@ -1,17 +1,22 @@
-<div id='dropzone'><h1>drop files here</h1></div>
+<div class='box' id='dropzone'><h1>drop files here</h1></div>
+<div class='box'>
+	<h2>or select them</h2>
+	<input type='file' id='file_picker' multiple>
+</div>
 <ul id='uploads'></ul>
 
 <style>
 html { display: flex; justify-content: center }
 body { margin: 5em; width: 32em }
-#dropzone { border: outset; display: flex; justify-content: center; align-items: center }
+.box { padding: 1em; border: outset; display: flex; flex-direction: column; justify-content: center; align-items: center }
 #uploads { white-space: nowrap }
 </style>
 
 <script>
-const DROPZONE   = document.querySelector('#dropzone')
-const FILE_INPUT = document.querySelector('#file_input')
-const UPLOADS    = document.querySelector('#uploads')
+const DROPZONE    = document.querySelector('#dropzone')
+const FILE_PICKER = document.querySelector('#file_picker')
+const FILE_INPUT  = document.querySelector('#file_input')
+const UPLOADS     = document.querySelector('#uploads')
 
 const form =
 	obj =>
@@ -32,9 +37,10 @@ const nothing = e => e.preventDefault()
 DROPZONE.addEventListener('dragenter', nothing)
 DROPZONE.addEventListener('dragover', nothing)
 
-DROPZONE.addEventListener('drop', e => {
-
-	for (const file of e.dataTransfer.files)
+const upload_files =
+	files =>
+{
+	for (const file of files)
 		upload_file(file)
 			.then(r => r.json())
 			.then(j => {
@@ -48,7 +54,15 @@ DROPZONE.addEventListener('drop', e => {
 
 			UPLOADS.appendChild(li)
 		})
+}
 
+DROPZONE.addEventListener('drop', e => {
+	upload_files(e.dataTransfer.files)
 	e.preventDefault()
+})
+
+FILE_PICKER.addEventListener('change', e => {
+	upload_files(FILE_PICKER.files)
+	FILE_PICKER.value = null
 })
 </script>
