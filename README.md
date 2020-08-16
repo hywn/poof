@@ -5,6 +5,13 @@ this is simple file hosting like pomf
 - stores actual file data in sqlite
 - database stores sha1 hash, mimetype, and data
 
+## relevant files
+```
+index.html -- upload interface; POSTs to upload.php
+upload.php -- stores data in SQL
+file.php   -- gets data from SQL
+```
+
 ## thoughts
 - atm <100lines PHP and <100lines HTML, which is cool
 - am pretty sure storing files in sqlite is as fine as storing files on computer; will probably only become problem once you want to split servers up?
