@@ -22,10 +22,7 @@ const form =
 	obj =>
 {
 	const f = new FormData()
-
-	for ([k, v] of Object.entries(obj))
-		f.append(k, v)
-
+	Object.entries(obj).forEach(([k, v]) => f.append(k, v))
 	return f
 }
 
@@ -33,40 +30,34 @@ const upload_file =
 	file =>
 		fetch('./upload.php', { method: 'POST', body: form({ file_data: file }) })
 
-const nothing = e => e.preventDefault()
-DROPZONE.addEventListener('dragenter', nothing)
-DROPZONE.addEventListener('dragover', nothing)
-
-const ack =
-	file =>
+const log =
+	html =>
 {
 	const li = document.createElement('li')
-	li.innerText = `sent ${file.name} for upload...`
-
+	li.innerHTML = html
 	UPLOADS.appendChild(li)
 }
 
 const upload_files =
-	files =>
-{
-	for (const file of files) {
-		ack(file)
+	async files =>
+		Promise.all([...files].map(async file => {
+			log(`sent ${file.name} for upload...`)
 
-		upload_file(file)
-			.then(r => r.json())
-			.then(j => {
-				if (!j.hash) {
-					console.error(j)
-					return
+			const j = await upload_file(file).then(r => r.json())
+
+			if (!j.hash) {
+				console.error(j)
+				return
 			}
 
-			const li = document.createElement('li')
-			li.innerHTML = `uploaded: [<a href='./file.php?hash=${j.hash}'>${j.hash}</a>] (${file.name})`
+			log(`uploaded: [<a href='./file.php?hash=${j.hash}'>${j.hash}</a>] (${file.name})`)
 
-			UPLOADS.appendChild(li)
-		})
-	}
-}
+			return j
+		}))
+
+const nothing = e => e.preventDefault()
+DROPZONE.addEventListener('dragenter', nothing)
+DROPZONE.addEventListener('dragover', nothing)
 
 DROPZONE.addEventListener('drop', e => {
 	upload_files(e.dataTransfer.files)
